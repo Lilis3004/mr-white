@@ -1,21 +1,27 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" data-theme="dark">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>السيد الأبيض</title>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>السيد الأبيض</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet"/>
 
-<link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+<button class="theme-btn" onclick="toggleTheme()">
+  <span id="theme-icon">☀️</span>
+  <span id="theme-txt">وضع النهار</span>
+</button>
+
 <!-- HOME -->
 <div id="p-home" class="page on">
-  <div>
-    <h1>السيد <em>الأبيض</em></h1>
+  <div class="title-wrap">
+    <span class="title-sayyid">السيد</span>
+    <span class="title-abyad">الأبيض</span>
     <p class="sub">لعبة الاستنتاج الاجتماعي</p>
   </div>
 
@@ -35,13 +41,17 @@
 
     <div id="ai-chips" class="chips"></div>
 
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <button class="btn bd" style="max-width:none;flex:1;padding:10px" onclick="addAI()">+ إضافة AI</button>
+    <div style="display:flex;gap:8px">
+      <button class="btn bd" style="max-width:none;flex:1;padding:10px" onclick="addAI()">
+        + إضافة AI
+      </button>
 
-      <button class="btn bd" style="max-width:none;flex:1;padding:10px" onclick="removeLastAI()">− حذف AI</button>
+      <button class="btn bd" style="max-width:none;flex:1;padding:10px" onclick="removeLastAI()">
+        − حذف AI
+      </button>
     </div>
 
-    <p style="font-size:11px;color:#333;margin-top:6px;text-align:center">
+    <p style="font-size:11px;color:var(--muted);margin-top:6px;text-align:center">
       سيختار AI الكلمات تلقائياً
     </p>
   </div>
@@ -53,7 +63,38 @@
   </button>
 </div>
 
-<script src="script.js"></script>
+<!-- OVERLAY -->
+<div id="overlay" class="hide">
+  <p class="ov-hint">دور</p>
 
+  <p class="ov-who" id="ov-who">—</p>
+
+  <div class="flip-wrap" onclick="flipCard()">
+    <div class="flip-inner" id="ov-inner">
+
+      <div class="ff fb">
+        <div class="q">?</div>
+        <div class="ht">اضغط للكشف</div>
+      </div>
+
+      <div class="ff fr" id="ov-front">
+        <div class="rn" id="ov-rn">مواطن</div>
+
+        <div class="kl">كلمتك السرية</div>
+
+        <div class="kv" id="ov-kv">—</div>
+      </div>
+
+    </div>
+  </div>
+
+  <button class="btn ov-next bd" id="ov-next" onclick="nextOverlay()">
+    التالي ←
+  </button>
+
+  <p class="ov-hint">لا تُظهر شاشتك للآخرين!</p>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>

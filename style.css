@@ -1,210 +1,101 @@
-*{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
+let players = [];
+let aiPlayers = [];
+let aiCount = 0;
+
+const $ = id => document.getElementById(id);
+
+let theme = localStorage.getItem('sayyid-theme') || 'dark';
+
+function applyTheme(){
+  document.documentElement.setAttribute('data-theme', theme);
+
+  $('theme-icon').textContent =
+    theme === 'dark' ? '☀️' : '🌙';
+
+  $('theme-txt').textContent =
+    theme === 'dark'
+      ? 'وضع النهار'
+      : 'وضع الليل';
+}
+
+applyTheme();
+
+function toggleTheme(){
+  theme = theme === 'dark'
+    ? 'light'
+    : 'dark';
+
+  localStorage.setItem('sayyid-theme', theme);
+
+  applyTheme();
+}
+
+function renderChips(){
+  $('chips').innerHTML = players.map((p,i)=>
+    `<div class="chip">
+      ${p}
+      <span class="x" onclick="removeP(${i})">×</span>
+    </div>`
+  ).join('');
+}
+
+function addP(){
+  const v = $('pinput').value.trim();
+
+  if(v && !players.includes(v) && (players.length + aiPlayers.length) < 8){
+    players.push(v);
+
+    $('pinput').value = '';
+
+    renderChips();
   }
-  
-  :root{
-    --red:#e63946;
-    --bg:#0e0e0e;
-    --card:#181818;
-    --border:#272727;
-    --muted:#555;
-    --text:#f0ede6;
-    --green:#4caf50;
+}
+
+function removeP(i){
+  players.splice(i,1);
+
+  renderChips();
+}
+
+$('pinput').onkeydown = e => {
+  if(e.key === 'Enter') addP();
+};
+
+function renderAIChips(){
+  $('ai-chips').innerHTML = aiPlayers.map(a =>
+    `<div class="ai-chip">🤖 ${a}</div>`
+  ).join('');
+}
+
+function addAI(){
+  if(players.length + aiPlayers.length >= 8) return;
+
+  aiCount++;
+
+  aiPlayers.push('AI-' + aiCount);
+
+  renderAIChips();
+}
+
+function removeLastAI(){
+  if(!aiPlayers.length) return;
+
+  aiPlayers.pop();
+
+  renderAIChips();
+}
+
+function startGame(){
+  const total = players.length + aiPlayers.length;
+
+  if(total < 3){
+    $('err-home').textContent =
+      'الحد الأدنى ٣ لاعبين!';
+
+    return;
   }
-  
-  body{
-    font-family:'Cairo',sans-serif;
-    background:var(--bg);
-    color:var(--text);
-    min-height:100vh;
-    direction:rtl;
-  }
-  
-  .page{
-    display:none;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    min-height:100vh;
-    padding:2rem 1.2rem;
-    gap:1rem;
-  }
-  
-  .page.on{
-    display:flex;
-  }
-  
-  h1{
-    font-size:2.6rem;
-    font-weight:900;
-    text-align:center;
-    line-height:1.1;
-  }
-  
-  h1 em{
-    color:var(--green);
-    font-style:normal;
-  }
-  
-  .sub{
-    font-size:11px;
-    color:var(--muted);
-    text-align:center;
-    letter-spacing:2px;
-    text-transform:uppercase;
-  }
-  
-  .box{
-    background:var(--card);
-    border:1px solid var(--border);
-    border-radius:14px;
-    padding:1.4rem;
-    width:100%;
-    max-width:460px;
-  }
-  
-  .lbl{
-    font-size:11px;
-    color:var(--muted);
-    display:block;
-    margin-bottom:6px;
-    margin-top:14px;
-    letter-spacing:1px;
-  }
-  
-  .lbl:first-child{
-    margin-top:0;
-  }
-  
-  input[type=text]{
-    width:100%;
-    background:#0e0e0e;
-    border:1px solid var(--border);
-    color:var(--text);
-    border-radius:8px;
-    padding:11px 14px;
-    font-family:'Cairo',sans-serif;
-    font-size:14px;
-    outline:none;
-    direction:rtl;
-  }
-  
-  input[type=text]:focus{
-    border-color:#444;
-  }
-  
-  input[type=text]::placeholder{
-    color:#2a2a2a;
-  }
-  
-  .btn{
-    display:block;
-    width:100%;
-    max-width:460px;
-    padding:13px;
-    border-radius:10px;
-    font-family:'Cairo',sans-serif;
-    font-size:14px;
-    font-weight:700;
-    cursor:pointer;
-    border:none;
-    transition:opacity .15s;
-    text-align:center;
-  }
-  
-  .bp{
-    background:var(--red);
-    color:#fff;
-  }
-  
-  .bp:hover{
-    opacity:.88;
-  }
-  
-  .bd{
-    background:#1c1c1c;
-    color:#888;
-    border:1px solid var(--border);
-  }
-  
-  .bd:hover{
-    background:#222;
-  }
-  
-  .err{
-    color:var(--red);
-    font-size:12px;
-    text-align:center;
-  }
-  
-  .chips{
-    display:flex;
-    flex-wrap:wrap;
-    gap:6px;
-    margin-bottom:10px;
-  }
-  
-  .chip{
-    background:#1e1e1e;
-    border:1px solid var(--border);
-    border-radius:20px;
-    padding:5px 12px;
-    font-size:13px;
-    display:flex;
-    align-items:center;
-    gap:6px;
-  }
-  
-  .chip .x{
-    cursor:pointer;
-    color:#444;
-    font-size:16px;
-  }
-  
-  .chip .x:hover{
-    color:var(--red);
-  }
-  
-  .row{
-    display:flex;
-    gap:8px;
-    flex-direction:row-reverse;
-  }
-  
-  .row input{
-    flex:1;
-  }
-  
-  .addbtn{
-    background:#222;
-    border:1px solid var(--border);
-    color:var(--text);
-    border-radius:8px;
-    padding:0 14px;
-    cursor:pointer;
-    font-size:18px;
-  }
-  
-  .addbtn:hover{
-    background:#2a2a2a;
-  }
-  
-  .ai-chip{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    background:#1a1020;
-    border:1px solid #3a1a4a;
-    border-radius:20px;
-    padding:5px 12px;
-    font-size:12px;
-    color:#b07ee8;
-  }
-  
-  .divider{
-    height:1px;
-    background:var(--border);
-    margin:1rem 0;
-  }
+
+  $('err-home').textContent = '';
+
+  alert('Game Started!');
+}
