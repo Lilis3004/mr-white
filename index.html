@@ -4,12 +4,9 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>السيد الأبيض</title>
-
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet"/>
-
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css"/>
 </head>
-
 <body>
 
 <button class="theme-btn" onclick="toggleTheme()">
@@ -17,7 +14,7 @@
   <span id="theme-txt">وضع النهار</span>
 </button>
 
-<!-- HOME -->
+<!-- ════ HOME PAGE ════ -->
 <div id="p-home" class="page on">
   <div class="title-wrap">
     <span class="title-sayyid">السيد</span>
@@ -27,72 +24,112 @@
 
   <div class="box">
     <span class="lbl">اللاعبون (الحد الأدنى ٣، الحد الأقصى ٨)</span>
-
     <div class="chips" id="chips"></div>
-
     <div class="row">
       <input type="text" id="pinput" placeholder="اسم اللاعب..." maxlength="16"/>
       <button class="addbtn" onclick="addP()">+</button>
     </div>
-
     <div class="divider"></div>
-
     <span class="lbl">إضافة لاعبين AI</span>
-
     <div id="ai-chips" class="chips"></div>
-
     <div style="display:flex;gap:8px">
-      <button class="btn bd" style="max-width:none;flex:1;padding:10px" onclick="addAI()">
-        + إضافة AI
-      </button>
-
-      <button class="btn bd" style="max-width:none;flex:1;padding:10px" onclick="removeLastAI()">
-        − حذف AI
-      </button>
+      <button class="btn bd" style="max-width:none;flex:1;padding:10px" onclick="addAI()">+ إضافة AI</button>
+      <button class="btn bd" style="max-width:none;flex:1;padding:10px" onclick="removeLastAI()">− حذف AI</button>
     </div>
-
-    <p style="font-size:11px;color:var(--muted);margin-top:6px;text-align:center">
-      سيختار AI الكلمات تلقائياً
-    </p>
+    <p style="font-size:11px;color:var(--muted);margin-top:6px;text-align:center">سيختار AI الكلمات تلقائياً</p>
   </div>
 
   <p class="err" id="err-home"></p>
-
-  <button class="btn bp" onclick="startGame()">
-    ابدأ — اختيار عشوائي
-  </button>
+  <button class="btn bp" onclick="startGame()">ابدأ — اختيار عشوائي</button>
 </div>
 
-<!-- OVERLAY -->
+<!-- ════ OVERLAY (role reveal) ════ -->
 <div id="overlay" class="hide">
   <p class="ov-hint">دور</p>
-
   <p class="ov-who" id="ov-who">—</p>
-
   <div class="flip-wrap" onclick="flipCard()">
     <div class="flip-inner" id="ov-inner">
-
       <div class="ff fb">
         <div class="q">?</div>
         <div class="ht">اضغط للكشف</div>
       </div>
-
       <div class="ff fr" id="ov-front">
         <div class="rn" id="ov-rn">مواطن</div>
-
         <div class="kl">كلمتك السرية</div>
-
         <div class="kv" id="ov-kv">—</div>
       </div>
-
     </div>
   </div>
-
-  <button class="btn ov-next bd" id="ov-next" onclick="nextOverlay()">
-    التالي ←
-  </button>
-
+  <button class="btn ov-next bd" id="ov-next" onclick="nextOverlay()">التالي ←</button>
   <p class="ov-hint">لا تُظهر شاشتك للآخرين!</p>
+</div>
+
+<!-- ════ WORD PHASE ════ -->
+<div id="p-word" class="page">
+  <p style="font-size:11px;color:var(--muted);letter-spacing:1px" id="word-rlbl">الجولة ١</p>
+  <p style="font-family:'Cairo',sans-serif;font-size:1.5rem;font-weight:900;text-align:center;color:var(--text)" id="word-who">—</p>
+  <div class="kwbar cit" id="word-kwbar">
+    <div>
+      <div class="kl">كلمتك السرية</div>
+      <div class="kv" id="word-kv">—</div>
+    </div>
+    <div class="rbadge" id="word-badge">مواطن</div>
+  </div>
+  <p style="font-size:12px;color:var(--muted);text-align:center">اختر كلمة لوصف كلمتك السرية</p>
+  <div class="box">
+    <div class="wgrid" id="wgrid"></div>
+    <input type="text" id="cust" placeholder="أو اكتب كلمتك..." maxlength="24" oninput="onCust(this)"/>
+  </div>
+  <button class="btn bp" id="sub-btn" onclick="submitWord()" disabled>تأكيد الاختيار</button>
+  <p class="err" id="err-word"></p>
+</div>
+
+<!-- ════ AI THINKING ════ -->
+<div id="p-ai" class="page">
+  <div style="width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:sp .8s linear infinite"></div>
+  <p style="font-size:14px;color:var(--muted);text-align:center" id="ai-txt">AI يفكر...</p>
+</div>
+
+<!-- ════ VOTE PHASE ════ -->
+<div id="p-vote" class="page">
+  <p style="font-size:11px;color:var(--muted);letter-spacing:1px" id="vote-rlbl">الجولة ١ — التصويت</p>
+  <div class="voter-label" id="voter-label">🗳 دور التصويت</div>
+  <p style="font-family:'Cairo',sans-serif;font-size:1.1rem;font-weight:700;text-align:center;color:var(--text)">من هو السيد الأبيض؟</p>
+  <p style="font-size:12px;color:var(--muted);text-align:center">الكلمة السرية مخفية — خمّن من الكلمات المختارة</p>
+  <div class="box"><div id="vlist"></div></div>
+  <button class="btn bp" id="vote-btn" onclick="confirmVote()" disabled>أدِن!</button>
+</div>
+
+<!-- ════ VOTE RESULT SUMMARY ════ -->
+<div id="p-vresult" class="page">
+  <p style="font-size:11px;color:var(--muted);letter-spacing:1px" id="vr-rlbl">نتيجة التصويت</p>
+  <p style="font-family:'Cairo',sans-serif;font-size:1.1rem;font-weight:700;text-align:center;color:var(--text)">من صوّت لمن؟</p>
+  <div class="box"><div id="vr-list"></div></div>
+  <div class="box" style="text-align:center;padding:1rem">
+    <div style="font-size:11px;color:var(--muted);margin-bottom:4px">المتهم بالأغلبية</div>
+    <div style="font-family:'Cairo',sans-serif;font-size:1.5rem;font-weight:900;color:var(--blue)" id="vr-accused">—</div>
+  </div>
+  <button class="btn bp" onclick="revealVerdict()">اكشف النتيجة ←</button>
+</div>
+
+<!-- ════ WRONG ════ -->
+<div id="p-wrong" class="page">
+  <div style="font-size:3rem;text-align:center">😅</div>
+  <p style="font-family:'Cairo',sans-serif;font-size:1.5rem;font-weight:900;color:var(--red);text-align:center">خطأ!</p>
+  <div class="wrong-box" id="wrong-msg"></div>
+  <div class="next-rnd-box">
+    <div style="font-size:11px;color:var(--muted);margin-bottom:4px">الجولة القادمة</div>
+    <div style="font-size:14px;font-weight:700;color:var(--blue)">كلمة سرية جديدة 🔄</div>
+  </div>
+  <button class="btn bp" onclick="nextRound()">انتقل إلى الجولة التالية ←</button>
+</div>
+
+<!-- ════ RESULT ════ -->
+<div id="p-result" class="page">
+  <div id="res-hd"></div>
+  <div class="infobox" id="res-info"></div>
+  <div class="box"><div id="res-tbl" style="font-size:13px"></div></div>
+  <button class="btn bp" onclick="goHome()">العب مجددًا</button>
 </div>
 
 <script src="script.js"></script>
