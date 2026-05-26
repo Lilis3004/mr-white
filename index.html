@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>السيد الأبيض</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- HOME -->
+<div id="p-home" class="page on">
+  <div>
+    <h1>السيد <em>الأبيض</em></h1>
+    <p class="sub">لعبة الاستنتاج الاجتماعي</p>
+  </div>
+
+  <div class="box">
+    <span class="lbl">اللاعبون (الحد الأدنى ٣، الحد الأقصى ٨)</span>
+
+    <div class="chips" id="chips"></div>
+
+    <div class="row">
+      <input type="text" id="pinput" placeholder="اسم اللاعب..." maxlength="16"/>
+      <button class="addbtn" onclick="addP()">+</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <span class="lbl">إضافة لاعبين AI</span>
+
+    <div id="ai-chips" class="chips"></div>
+
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn bd" style="max-width:none;flex:1;padding:10px" onclick="addAI()">+ إضافة AI</button>
+
+      <button class="btn bd" style="max-width:none;flex:1;padding:10px" onclick="removeLastAI()">− حذف AI</button>
+    </div>
+
+    <p style="font-size:11px;color:#333;margin-top:6px;text-align:center">
+      سيختار AI الكلمات تلقائياً
+    </p>
+  </div>
+
+  <p class="err" id="err-home"></p>
+
+  <button class="btn bp" onclick="startGame()">
+    ابدأ — اختيار عشوائي
+  </button>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
